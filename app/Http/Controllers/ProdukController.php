@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Produk;
 use App\Kategori;
 use Datatables;
+use Redirect;
 use PDF;
 
 class ProdukController extends Controller
@@ -19,20 +20,16 @@ class ProdukController extends Controller
     public function listData()
     {
     
-      $produk = Produk::leftJoin('kategori', 'kategori.id_kategori', '=', 'produk.id_kategori')
-      ->orderBy('produk.id_produk', 'desc')
-      ->get();
+      $produk = Produk::orderBy('id_produk', 'desc')->get();
         $no = 0;
         $data = array();
         foreach($produk as $list){
           $no ++;
           $row = array();
-           $row[] = "<input type='checkbox' name='id[]'' value='".$list->id_produk."'>";
           $row[] = $no;
-           $row[] = $list->kode_produk;
+          $row[] = $list->id_produk;
           $row[] = $list->nama_produk;
-          $row[] = $list->nama_kategori;
-          $row[] = $list->merk;
+          $row[] = "Goni";
           $row[] = "Rp. ".format_uang($list->harga_beli);
           $row[] = "Rp. ".format_uang($list->harga_jual);
           $row[] = $list->stok;
@@ -48,21 +45,16 @@ class ProdukController extends Controller
 
     public function store(Request $request)
     {
-        $jml = Produk::where('kode_produk', '=', $request['kode'])->count();
-        if($jml < 1){
             $produk = new Produk;
-            $produk->kode_produk     = $request['kode'];
+            $produk->id_produk     = $request['kode'];
             $produk->nama_produk    = $request['nama'];
-            $produk->id_kategori    = $request['kategori'];
-            $produk->merk          = $request['merk'];
             $produk->harga_beli      = $request['harga_beli'];
-            $produk->harga_jual    = $request['harga_jual'];
+            $produk->harga_jual      = $request['harga_jual'];
             $produk->stok          = $request['stok'];
             $produk->save();
             echo json_encode(array('msg'=>'success'));
-        }else{
-            echo json_encode(array('msg'=>'error'));
-        }
+            return Redirect::route('produk.index'); 
+       
     }
 
     public function edit($id)
@@ -75,13 +67,10 @@ class ProdukController extends Controller
     {
         $produk = Produk::find($id);
         $produk->nama_produk    = $request['nama'];
-        $produk->id_kategori    = $request['kategori'];
-        $produk->merk          = $request['merk'];
         $produk->harga_beli      = $request['harga_beli'];
-        $produk->harga_jual    = $request['harga_jual'];
+        $produk->harga_jual     = $request['harga_jual'];
         $produk->stok          = $request['stok'];
         $produk->update();
-        echo json_encode(array('msg'=>'success'));
     }
 
     public function destroy($id)

@@ -47,7 +47,7 @@
       
     <tr>
        <td>{{ ++$no }}</td>
-       <td>{{ $data->kode_produk }}</td>
+       <td>{{ $data->id_produk }}</td>
        <td>{{ $data->nama_produk }}</td>
        <td align="right">{{ format_uang($data->harga_jual) }}</td>
        <td>{{ $data->jumlah }}</td>

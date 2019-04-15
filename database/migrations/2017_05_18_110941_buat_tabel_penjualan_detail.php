@@ -16,7 +16,7 @@ class BuatTabelPenjualanDetail extends Migration
       Schema::create('penjualan_detail', function(Blueprint $table){
          $table->increments('id_penjualan_detail');       
          $table->integer('id_penjualan')->unsigned();       
-         $table->bigInteger('kode_produk')->unsigned();         
+         $table->bigInteger('id_produk')->unsigned();         
          $table->bigInteger('harga_jual')->unsigned();         
          $table->integer('jumlah')->unsigned();                 
          $table->bigInteger('sub_total')->unsigned();     

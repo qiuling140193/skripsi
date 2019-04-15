@@ -16,7 +16,6 @@
       <div class="box-header">
         <a onclick="addForm()" class="btn btn-success"><i class="fa fa-plus-circle"></i> Tambah</a>
         <a onclick="deleteAll()" class="btn btn-danger"><i class="fa fa-trash"></i> Hapus</a>
-        <a onclick="printBarcode()" class="btn btn-info"><i class="fa fa-barcode"></i> Cetak Barcode</a>
       </div>
       <div class="box-body">  
 
@@ -25,13 +24,11 @@
 <table class="table table-striped">
 <thead>
    <tr>
-      <th width="20"><input type="checkbox" value="1" id="select-all"></th>
       <th width="20">No</th>
       <th>Kode Produk</th>
       <th>Nama Produk</th>
-      <th>Kategori</th>
-      <th>Merk</th>
-      <th>Harga Beli</th>
+      <th>Satuan</th>
+      <th>Harga Modal</th>
       <th>Harga Jual</th>
       <th>Stok</th>
       <th width="100">Aksi</th>
@@ -55,49 +52,34 @@ var table, save_method;
 $(function(){
    table = $('.table').DataTable({
      "processing" : true,
-     "serverside" : true,
      "ajax" : {
        "url" : "{{ route('produk.data') }}",
        "type" : "GET"
-     },
-     'columnDefs': [{
-         'targets': 0,
-         'searchable': false,
-         'orderable': false
-      }],
-      'order': [1, 'asc']
+     }
    }); 
    
-   $('#select-all').click(function(){
-      $('input[type="checkbox"]').prop('checked', this.checked);
-   });
+   
 
   $('#modal-form form').validator().on('submit', function(e){
-      if(!e.isDefaultPrevented()){
+      
          var id = $('#id').val();
          if(save_method == "add") url = "{{ route('produk.store') }}";
          else url = "produk/"+id;
          
          $.ajax({
            url : url,
-           type : "POST",
+           type : save_method == "add" ? "POST" : "PUT",
            data : $('#modal-form form').serialize(),
-           dataType: 'JSON',
            success : function(data){
-             if(data.msg=="error"){
-                alert('Kode produk sudah digunakan!');
-                $('#kode').focus().select();
-             }else{
-                $('#modal-form').modal('hide');
-                table.ajax.reload();
-             }            
+             $('#modal-form').modal('hide');
+             table.ajax.reload();
            },
            error : function(){
              alert("Tidak dapat menyimpan data!");
            }   
          });
          return false;
-     }
+     
    });
 });
 
@@ -123,10 +105,7 @@ function editForm(id){
        $('.modal-title').text('Edit Produk');
        
        $('#id').val(data.id_produk);
-       $('#kode').val(data.kode_produk).attr('readonly', true);
        $('#nama').val(data.nama_produk);
-       $('#kategori').val(data.id_kategori);
-       $('#merk').val(data.merk);
        $('#harga_beli').val(data.harga_beli);
        $('#harga_jual').val(data.harga_jual);
        $('#stok').val(data.stok);
@@ -154,30 +133,8 @@ function deleteData(id){
    }
 }
 
-function deleteAll(){
-  if($('input:checked').length < 1){
-    alert('Pilih data yang akan dihapus!');
-  }else if(confirm("Apakah yakin akan menghapus semua data terpilih?")){
-     $.ajax({
-       url : "produk/hapus",
-       type : "POST",
-       data : $('#form-produk').serialize(),
-       success : function(data){
-         table.ajax.reload();
-       },
-       error : function(){
-         alert("Tidak dapat menghapus data!");
-       }
-     });
-   }
-}
 
-function printBarcode(){
-  if($('input:checked').length < 1){
-    alert('Pilih data yang akan dicetak!');
-  }else{
-    $('#form-produk').attr('target', '_blank').attr('action', "produk/cetak").submit();
-  }
-}
+
+
 </script>
 @endsection

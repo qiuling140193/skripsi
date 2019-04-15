@@ -29,13 +29,15 @@ Route::group(['middleware' => 'web'], function(){
 });
 
 Route::group(['middleware' => ['web', 'cekuser:1' ]], function(){
-   Route::get('kategori/data', 'KategoriController@listData')->name('kategori.data');
-   Route::resource('kategori', 'KategoriController');
+  
 
    Route::get('produk/data', 'ProdukController@listData')->name('produk.data');
    Route::post('produk/hapus', 'ProdukController@deleteSelected');
-   Route::post('produk/cetak', 'ProdukController@printBarcode');
    Route::resource('produk', 'ProdukController');
+
+   Route::get('forecasting/data', 'ForecastingController@listData')->name('forecasting.data');
+   Route::get('forecasting/get-data', 'ForecastingController@getForecast')->name('forecasting.get-forecast');
+   Route::resource('forecasting', 'ForecastingController');
 
    Route::get('supplier/data', 'SupplierController@listData')->name('supplier.data');
    Route::resource('supplier', 'SupplierController');
@@ -51,7 +53,7 @@ Route::group(['middleware' => ['web', 'cekuser:1' ]], function(){
    Route::get('user/data', 'UserController@listData')->name('user.data');
    Route::resource('user', 'UserController');
 
-   Route::get('pembelian/data', 'PembelianController@listData')->name('pembelian.data');
+   Route::post('pembelian/data', 'PembelianController@listData')->name('pembelian.data');
    Route::get('pembelian/{id}/tambah', 'PembelianController@create');
    Route::get('pembelian/{id}/lihat', 'PembelianController@show');
    Route::resource('pembelian', 'PembelianController');   

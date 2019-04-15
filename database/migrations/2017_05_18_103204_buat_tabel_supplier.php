@@ -17,8 +17,7 @@ class BuatTabelSupplier extends Migration
          $table->increments('id_supplier');             
          $table->string('nama', 100);         
          $table->text('alamat');         
-         $table->string('telpon', 20);  
-         $table->timestamps();       
+         $table->string('telepon', 20);        
       });
    }
 

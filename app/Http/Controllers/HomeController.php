@@ -50,7 +50,6 @@ class HomeController extends Controller
         $tanggal = date('Y-m-d', strtotime("+1 day", strtotime($tanggal)));
       }
         
-        $kategori = Kategori::count();
         $produk = Produk::count();
         $supplier = Supplier::count();
         $member = Member::count();

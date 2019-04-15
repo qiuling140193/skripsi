@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-  Daftar Penjualan
+  Historis Penjualan
 @endsection
 
 @section('breadcrumb')
@@ -87,7 +87,7 @@ function showPayment(id){
        $('.modal-title').text('Edit Penjualan');
        
        $('#id').val(data.id_penjualan);
-       $('#member').val(data.kode_member).attr('readonly', true);
+       $('#member').val(data.id_member).attr('readonly', true);
        $('#totalitem').val(data.total_item);
        $('#total').val(data.total_harga);
        $('#retur').val(data.retur);

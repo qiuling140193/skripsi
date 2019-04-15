@@ -26,6 +26,7 @@ class PembelianController extends Controller
      $no = 0;
      $data = array();
      foreach($pembelian as $list){
+      
        $no ++;
        $row = array();
        $row[] = $no;
@@ -48,7 +49,7 @@ class PembelianController extends Controller
    public function show($id)
    {
    
-     $detail = PembelianDetail::leftJoin('produk', 'produk.kode_produk', '=', 'pembelian_detail.kode_produk')
+     $detail = PembelianDetail::leftJoin('produk', 'produk.id_produk', '=', 'pembelian_detail.id_produk')
         ->where('id_pembelian', '=', $id)
         ->get();
      $no = 0;
@@ -57,7 +58,7 @@ class PembelianController extends Controller
        $no ++;
        $row = array();
        $row[] = $no;
-       $row[] = $list->kode_produk;
+       $row[] = $list->id_produk;
        $row[] = $list->nama_produk;
        $row[] = "Rp. ".format_uang($list->harga_beli);
        $row[] = $list->jumlah;
@@ -94,7 +95,7 @@ class PembelianController extends Controller
 
       $detail = PembelianDetail::where('id_pembelian', '=', $request['idpembelian'])->get();
       foreach($detail as $data){
-        $produk = Produk::where('kode_produk', '=', $data->kode_produk)->first();
+        $produk = Produk::where('id_produk', '=', $data->id_produk)->first();
         $produk->stok += $data->jumlah;
         $produk->update();
       }
@@ -108,7 +109,7 @@ class PembelianController extends Controller
 
       $detail = PembelianDetail::where('id_pembelian', '=', $id)->get();
       foreach($detail as $data){
-        $produk = Produk::where('kode_produk', '=', $data->kode_produk)->first();
+        $produk = Produk::where('id_produk', '=', $data->id_produk)->first();
         $produk->stok -= $data->jumlah;
         $produk->update();
         $data->delete();

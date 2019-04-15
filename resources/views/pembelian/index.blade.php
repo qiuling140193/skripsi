@@ -54,7 +54,8 @@ $(function(){
      "serverside" : true,
      "ajax" : {
        "url" : "{{ route('pembelian.data') }}",
-       "type" : "GET"
+       "type" : "POST",
+       "data":{ _token: $('meta[name="csrf-token"]').attr('content').toString() }
      }
    }); 
    

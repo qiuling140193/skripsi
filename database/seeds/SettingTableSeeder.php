@@ -13,8 +13,8 @@ class SettingTableSeeder extends Seeder
     {
         DB::table('setting')->insert(array(
         [
-         'nama_perusahaan' => 'Heymart', 
-         'alamat' => 'Jl. Citarum, Slawi, Tegal',
+         'nama_perusahaan' => 'Kilang Padi DT.AA', 
+         'alamat' => 'KM.9 Tanjung Balai',
          'telepon' => '085823423232',
          'logo' => 'logo.png',
          'kartu_member' => 'card.png',

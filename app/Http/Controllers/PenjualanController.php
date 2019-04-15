@@ -19,8 +19,8 @@ class PenjualanController extends Controller
    public function listData()
    {
    
-     $penjualan = Penjualan::leftJoin('users', 'users.id', '=', 'penjualan.id_user')
-        ->select('users.*', 'penjualan.*', 'penjualan.created_at as tanggal')
+     $penjualan = Penjualan::leftJoin('member', 'member.id_member', '=', 'penjualan.id_member')
+        ->select('member.*', 'penjualan.*', 'penjualan.created_at as tanggal')
         ->orderBy('penjualan.id_penjualan', 'desc')
         ->get();
      $no = 0;
@@ -31,12 +31,12 @@ class PenjualanController extends Controller
        $row = array();
        $row[] = $no;
        $row[] = tanggal_indonesia(substr($list->tanggal, 0, 10), false);
-       $row[] = $list->kode_member;
+       $row[] = $list->nama;
        $row[] = $list->total_item;
        $row[] = "Rp. ".format_uang($list->total_harga);
        $row[] = $list->retur;
        $row[] = "Rp. ".format_uang($list->bayar);
-       $row[] = $list->name;
+       $row[] = $list->id_user;
        $row[] = '<div class="btn-group">
                <a onclick="showDetail('.$list->id_penjualan.')" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i></a>
                <a onclick="deleteData('.$list->id_penjualan.')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
@@ -58,7 +58,7 @@ class PenjualanController extends Controller
     public function update(Request $request, $id)
     {
       $penjualan = Penjualan::find($request['idpenjualan']);
-      $penjualan->kode_member = $request['member'];
+      $penjualan->id_member = $request['member'];
       $penjualan->total_item = $request['totalitem'];
       $penjualan->total_harga = $request['total'];
       $penjualan->retur = $request['retur'];
@@ -71,7 +71,7 @@ class PenjualanController extends Controller
    public function show($id)
    {
    
-     $detail = PenjualanDetail::leftJoin('produk', 'produk.kode_produk', '=', 'penjualan_detail.kode_produk')
+     $detail = PenjualanDetail::leftJoin('produk', 'produk.id_produk', '=', 'penjualan_detail.id_produk')
         ->where('id_penjualan', '=', $id)
         ->get();
      $no = 0;
@@ -80,7 +80,7 @@ class PenjualanController extends Controller
        $no ++;
        $row = array();
        $row[] = $no;
-       $row[] = $list->kode_produk;
+       $row[] = $list->id_produk;
        $row[] = $list->nama_produk;
        $row[] = "Rp. ".format_uang($list->harga_jual);
        $row[] = $list->jumlah;
@@ -99,7 +99,7 @@ class PenjualanController extends Controller
 
       $detail = PenjualanDetail::where('id_penjualan', '=', $id)->get();
       foreach($detail as $data){
-        $produk = Produk::where('kode_produk', '=', $data->kode_produk)->first();
+        $produk = Produk::where('id_produk', '=', $data->id_produk)->first();
         $produk->stok += $data->jumlah;
         $produk->update();
         $data->delete();

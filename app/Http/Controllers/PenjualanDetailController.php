@@ -7,6 +7,7 @@ use Redirect;
 use Auth;
 use PDF;
 use App\Penjualan;
+use App\Historis;
 use App\Produk;
 use App\Member;
 use App\Setting;
@@ -30,7 +31,7 @@ class PenjualanDetailController extends Controller
    public function listData($id)
    {
    
-     $detail = PenjualanDetail::leftJoin('produk', 'produk.kode_produk', '=', 'penjualan_detail.kode_produk')
+     $detail = PenjualanDetail::leftJoin('produk', 'produk.id_produk', '=', 'penjualan_detail.id_produk')
         ->where('id_penjualan', '=', $id)
         ->get();
      $no = 0;
@@ -41,7 +42,7 @@ class PenjualanDetailController extends Controller
        $no ++;
        $row = array();
        $row[] = $no;
-       $row[] = $list->kode_produk;
+       $row[] = $list->id_produk;
        $row[] = $list->nama_produk;
        $row[] = "Rp. ".format_uang($list->harga_jual);
        $row[] = "<input type='number' class='form-control' name='jumlah_$list->id_penjualan_detail' value='$list->jumlah' onChange='changeCount($list->id_penjualan_detail)'>";
@@ -60,21 +61,32 @@ class PenjualanDetailController extends Controller
      return response()->json($output);
    }
 
-   public function store(Request $request)
-   {
-        $produk = Produk::where('kode_produk', '=', $request['kode'])->first();
 
-        $detail = new PenjualanDetail;
+
+   public function store(Request $request, PenjualanDetail $detail, Historis $historis)
+   {
+        $produk = Produk::where('id_produk', '=', $request['kode'])->first();
+
+        $detail = new PenjualanDetail();
         $detail->id_penjualan = $request['idpenjualan'];
-        $detail->kode_produk = $request['kode'];
+        $detail->id_produk = $request['kode'];
         $detail->harga_jual = $produk->harga_jual;
         $detail->jumlah = 1;
         $detail->sub_total = $produk->harga_jual;
         $detail->save();
 
+        $historis = new Historis();
+        $historis->id_produk = $request['kode'];
+        $historis->harga_jual = $produk->harga_jual;
+        $historis->jumlah = 1;
+        $historis->sub_total = $produk->harga_jual;
+        $historis->save();
+
+        return Redirect::route('transaksi.index'); 
+
    }
 
-   public function update(Request $request, $id)
+   public function update(Request $request, $id, PenjualanDetail $detail, Historis $historis)
    {
       $nama_input = "jumlah_".$id;
       $detail = PenjualanDetail::find($id);
@@ -82,18 +94,27 @@ class PenjualanDetailController extends Controller
       $detail->jumlah = $request[$nama_input];
       $detail->sub_total = $total_harga;
       $detail->update();
+
+      $historis = Historis::find($id);
+      $total_harga = $request[$nama_input] * $historis->harga_jual;
+      $historis->jumlah = $request[$nama_input];
+      $historis->sub_total =$total_harga;
+      $historis->save();
    }
 
    public function destroy($id)
    {
       $detail = PenjualanDetail::find($id);
       $detail->delete();
+
+      $historis = Historis::find($id);
+      $historis->delete();
    }
 
    public function newSession()
    {
       $penjualan = new Penjualan; 
-      $penjualan->kode_member = 0;    
+      $penjualan->id_member = 0;    
       $penjualan->total_item = 0;    
       $penjualan->total_harga = 0;    
       $penjualan->retur = 0;    
@@ -110,7 +131,7 @@ class PenjualanDetailController extends Controller
    public function saveData(Request $request)
    {
       $penjualan = Penjualan::find($request['idpenjualan']);
-      $penjualan->kode_member = $request['member'];
+      $penjualan->id_member = $request['member'];
       $penjualan->total_item = $request['totalitem'];
       $penjualan->total_harga = $request['total'];
       $penjualan->retur = $request['retur'];
@@ -120,7 +141,7 @@ class PenjualanDetailController extends Controller
 
       $detail = PenjualanDetail::where('id_penjualan', '=', $request['idpenjualan'])->get();
       foreach($detail as $data){
-        $produk = Produk::where('kode_produk', '=', $data->kode_produk)->first();
+        $produk = Produk::where('id_produk', '=', $data->id_produk)->first();
         $produk->stok -= $data->jumlah;
         $produk->update();
       }
@@ -144,7 +165,7 @@ class PenjualanDetailController extends Controller
 
    public function printNota()
    {
-      $detail = PenjualanDetail::leftJoin('produk', 'produk.kode_produk', '=', 'penjualan_detail.kode_produk')
+      $detail = PenjualanDetail::leftJoin('produk', 'produk.id_produk', '=', 'penjualan_detail.id_produk')
         ->where('id_penjualan', '=', session('idpenjualan'))
         ->get();
 
@@ -219,7 +240,7 @@ class PenjualanDetailController extends Controller
    }
 
    public function notaPDF(){
-     $detail = PenjualanDetail::leftJoin('produk', 'produk.kode_produk', '=', 'penjualan_detail.kode_produk')
+     $detail = PenjualanDetail::leftJoin('produk', 'produk.id_produk', '=', 'penjualan_detail.id_produk')
         ->where('id_penjualan', '=', session('idpenjualan'))
         ->get();
 

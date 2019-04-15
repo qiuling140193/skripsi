@@ -15,7 +15,6 @@
     <div class="box">
       <div class="box-header">
         <a onclick="addForm()" class="btn btn-success"><i class="fa fa-plus-circle"></i> Tambah</a>
-        <a onclick="printCard()" class="btn btn-info"><i class="fa fa-credit-card"></i> Cetak Kartu</a>
       </div>
       <div class="box-body"> 
 
@@ -24,12 +23,11 @@
 <table class="table table-striped">
 <thead>
    <tr>
-      <th width="20"><input type="checkbox" value="1" id="select-all"></th>
       <th width="20">No</th>
       <th>Kode Member</th>
       <th>Nama Member</th>
       <th>Alamat</th>
-      <th>Telpon</th>
+      <th>Hp/Telp</th>
       <th width="100">Aksi</th>
    </tr>
 </thead>
@@ -68,31 +66,26 @@ $(function(){
    });
    
    $('#modal-form form').validator().on('submit', function(e){
-      if(!e.isDefaultPrevented()){
+      
          var id = $('#id').val();
+         console.log(id, 'ea')
          if(save_method == "add") url = "{{ route('member.store') }}";
          else url = "member/"+id;
          
-         $.ajax({
+        $.ajax({
            url : url,
-           type : "POST",
+           type : save_method == "add" ? "POST" : "PUT",
            data : $('#modal-form form').serialize(),
-           dataType: 'JSON',
            success : function(data){
-            if(data.msg=="error"){
-              alert('Kode member sudah digunakan!');
-              $('#kode').focus().select();
-            }else{
-              $('#modal-form').modal('hide');
-              table.ajax.reload();
-            }
+             $('#modal-form').modal('hide');
+             table.ajax.reload();
            },
            error : function(){
              alert("Tidak dapat menyimpan data!");
            }   
          });
          return false;
-     }
+     
    });
 });
 
@@ -118,7 +111,6 @@ function editForm(id){
        $('.modal-title').text('Edit Member');
        
        $('#id').val(data.id_member);
-       $('#kode').val(data.kode_member).attr('readonly', true);
        $('#nama').val(data.nama);
        $('#alamat').val(data.alamat);
        $('#telpon').val(data.telpon);
@@ -146,12 +138,5 @@ function deleteData(id){
    }
 }
 
-function printCard(){
-  if($('input:checked').length < 1){
-    alert('Pilih data yang akan dicetak!');
-  }else{
-    $('#form-member').attr('target', '_blank').attr('action', "member/cetak").submit();
-  }
-}
 </script>
 @endsection

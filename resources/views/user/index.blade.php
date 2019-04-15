@@ -51,7 +51,7 @@ $(function(){
    }); 
    
    $('#modal-form form').validator().on('submit', function(e){
-      if(!e.isDefaultPrevented()){
+      
          var id = $('#id').val();
          if(save_method == "add") url = "{{ route('user.store') }}";
          else url = "user/"+id;
@@ -69,7 +69,7 @@ $(function(){
            }   
          });
          return false;
-     }
+     
    });
 });
 

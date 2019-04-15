@@ -2,8 +2,8 @@
    <div class="modal-dialog modal-lg">
       <div class="modal-content">
      
-   <form class="form-horizontal" data-toggle="validator" method="post">
-   {{ csrf_field() }} {{ method_field('POST') }}
+   <form class="form-horizontal" data-toggle="validator">
+   {{ csrf_field() }}
    
    <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"> &times; </span> </button>
@@ -13,14 +13,6 @@
 <div class="modal-body">
    
    <input type="hidden" id="id" name="id">
-   <div class="form-group">
-      <label for="kode" class="col-md-3 control-label">Kode Member</label>
-      <div class="col-md-6">
-         <input id="kode" type="number" class="form-control" name="kode" autofocus required>
-         <span class="help-block with-errors"></span>
-      </div>
-   </div>
-
    <div class="form-group">
       <label for="nama" class="col-md-3 control-label">Nama Member</label>
       <div class="col-md-6">

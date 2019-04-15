@@ -2,8 +2,8 @@
    <div class="modal-dialog modal-lg">
       <div class="modal-content">
      
-   <form class="form-horizontal" data-toggle="validator" method="post">
-   {{ csrf_field() }} {{ method_field('POST') }}
+   <form class="form-horizontal" data-toggle="validator">
+   {{ csrf_field() }}
    
    <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"> &times; </span> </button>

@@ -21,11 +21,11 @@
       <tbody>
          @foreach($member as $data)
          <tr>
-            <th>{{ $data->kode_member }}</th>
+            <th>{{ $data->id_member }}</th>
             <th>{{ $data->nama }}</th>
             <th>{{ $data->alamat }}</th>
             <th>{{ $data->telpon }}</th>
-            <th><a onclick="selectMember({{ $data->kode_member }})" class="btn btn-primary"><i class="fa fa-check-circle"></i> Pilih</a></th>
+            <th><a onclick="selectMember({{ $data->id_member }})" class="btn btn-primary"><i class="fa fa-check-circle"></i> Pilih</a></th>
           </tr>
          @endforeach
       </tbody>

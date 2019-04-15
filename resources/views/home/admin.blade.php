@@ -11,14 +11,14 @@
 
 @section('content') 
 <div class="row">
-    <div class="col-lg-3 col-xs-6">
-        <div class="small-box bg-aqua">
+<div class="col-lg-3 col-xs-6">
+        <div class="small-box bg-red">
             <div class="inner">
-              <h3>{{ $kategori }}</h3>
-              <p>Total Kategori</p>
+              <h3>{{ $member }}</h3>
+              <p>Total Member</p>
             </div>
           <div class="icon">
-              <i class="fa fa-cube"></i>
+              <i class="fa fa-credit-card"></i>
           </div>
         </div>
     </div>
@@ -44,20 +44,10 @@
           </div>
         </div>
     </div>
-    <div class="col-lg-3 col-xs-6">
-        <div class="small-box bg-red">
-            <div class="inner">
-              <h3>{{ $member }}</h3>
-              <p>Total Member</p>
-            </div>
-          <div class="icon">
-              <i class="fa fa-credit-card"></i>
-          </div>
-        </div>
-    </div>
+    
 </div>
 
-<div class="row">
+<!-- <div class="row">
     <div class="col-md-12">
         <div class="box">
             <div class="box-header with-border">
@@ -70,7 +60,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 @endsection
 

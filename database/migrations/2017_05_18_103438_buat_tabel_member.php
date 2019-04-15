@@ -14,11 +14,10 @@ class BuatTabelMember extends Migration
    public function up()
    {
       Schema::create('member', function(Blueprint $table){
-         $table->increments('id_member');        
-         $table->biginteger('kode_member')->unsigned();       
+         $table->increments('id_member');               
          $table->string('nama', 100);         
          $table->text('alamat');         
-         $table->string('telpon', 20);      
+         $table->string('telepon', 20);      
          $table->timestamps();       
       });
    }

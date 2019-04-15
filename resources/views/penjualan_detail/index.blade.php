@@ -17,9 +17,9 @@
    
       <div class="box-body">
 
-<form class="form form-horizontal form-produk" method="post">
+<form class="form   <inform-horizontal form-produk" method="post">
 {{ csrf_field() }}  
-  <input type="hidden" name="idpenjualan" value="{{ $idpenjualan }}">
+<input type="hidden" name="idpenjualan" value="{{ $idpenjualan }}">
   <div class="form-group">
       <label for="kode" class="col-md-2 control-label">Kode Produk</label>
       <div class="col-md-5">

@@ -24,7 +24,7 @@
       <th width="30">No</th>
       <th>Nama Supplier</th>
       <th>Alamat</th>
-      <th>Telpon</th>
+      <th>Hp</th>
       <th width="100">Aksi</th>
    </tr>
 </thead>
@@ -51,15 +51,15 @@ $(function(){
      }
    }); 
    
-   $('#modal-form form').validator().on('submit', function(e){
-      if(!e.isDefaultPrevented()){
+   $('#modal-form form').on('submit', function(e){
+      // if(!e.isDefaultPrevented()){
          var id = $('#id').val();
          if(save_method == "add") url = "{{ route('supplier.store') }}";
          else url = "supplier/"+id;
          
          $.ajax({
            url : url,
-           type : "POST",
+           type : save_method == "add" ? "POST" : "PUT",
            data : $('#modal-form form').serialize(),
            success : function(data){
              $('#modal-form').modal('hide');
@@ -70,7 +70,7 @@ $(function(){
            }   
          });
          return false;
-     }
+     // }
    });
 });
 
